@@ -7,7 +7,7 @@ step "Stop existing container" {
         action_type = "Octopus.DockerStop"
         properties = {
             Octopus.Action.Docker.Remove = "True"
-            Octopus.Action.Docker.RemoveSteps = "aa5cf071-7359-43b4-8d84-84be991c171d"
+            Octopus.Action.Docker.RemoveSteps = "start-new-container"
         }
         worker_pool_variable = ""
     }
