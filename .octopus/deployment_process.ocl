@@ -1,0 +1,45 @@
+step "Stop existing container" {
+    properties = {
+        Octopus.Action.TargetRoles = "nas"
+    }
+
+    action {
+        action_type = "Octopus.DockerStop"
+        properties = {
+            Octopus.Action.Docker.Remove = "True"
+            Octopus.Action.Docker.RemoveSteps = "aa5cf071-7359-43b4-8d84-84be991c171d"
+        }
+        worker_pool_variable = ""
+    }
+}
+
+step "Start new container" {
+    properties = {
+        Octopus.Action.TargetRoles = "nas"
+    }
+
+    action {
+        action_type = "Octopus.DockerRun"
+        properties = {
+            Octopus.Action.Docker.Args = "--name arduino-ota-updater"
+            Octopus.Action.Docker.EnvVariable = "{\"VIRTUAL_HOST\":\"#{url}\",\"LETSENCRYPT_HOST\":\"#{url}\",\"Serilog__WriteTo__0__Args__serverUrl\":\"#{Seq.ServerUrl}\",\"Serilog__WriteTo__0__Args__ApiKey\":\"#{Seq.Arduino.Updater.ApiKey}\",\"LOGSPOUT\":\"ignore\"}"
+            Octopus.Action.Docker.PortAutoMap = "False"
+            Octopus.Action.Docker.PortMapping = "{}"
+            Octopus.Action.Docker.RestartPolicy = "always"
+            Octopus.Action.Docker.VolumeBindings = "{\"/app/packages\":{\"host\":\"/volume1/docker/ardunio-updater/packages\",\"readOnly\":\"True\",\"noCopy\":\"False\"}}"
+            Octopus.Action.Package.DownloadOnTentacle = "False"
+            Octopus.Action.Package.FeedId = "Docker Hub"
+            Octopus.Action.Package.PackageId = "mattrichardson/arduino-ota-updater"
+        }
+        worker_pool_variable = ""
+
+        packages {
+            acquisition_location = "Server"
+            feed = "Docker Hub"
+            package_id = "mattrichardson/arduino-ota-updater"
+            properties = {
+                SelectionMode = "immediate"
+            }
+        }
+    }
+}
