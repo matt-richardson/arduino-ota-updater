@@ -22,7 +22,7 @@ step "Start new container" {
         action_type = "Octopus.DockerRun"
         properties = {
             Octopus.Action.Docker.Args = "--name arduino-ota-updater"
-            Octopus.Action.Docker.EnvVariable = "{\"VIRTUAL_HOST\":\"#{url}\",\"LETSENCRYPT_HOST\":\"#{url}\",\"Serilog__WriteTo__0__Args__serverUrl\":\"#{Seq.ServerUrl}\",\"Serilog__WriteTo__0__Args__ApiKey\":\"#{Seq.Arduino.Updater.ApiKey}\",\"LOGSPOUT\":\"ignore\"}"
+            Octopus.Action.Docker.EnvVariable = "{\"VIRTUAL_HOST\":\"#{url}\",\"LETSENCRYPT_HOST\":\"#{url}\",\"Serilog__WriteTo__0__Args__serverUrl\":\"#{Seq.ServerUrl}\",\"Serilog__WriteTo__0__Args__ApiKey\":\"#{Seq.Arduino.Updater.ApiKey}\",\"LOGSPOUT\":\"ignore\",\"NETWORK_ACCESS\":\"internal\"}"
             Octopus.Action.Docker.PortAutoMap = "False"
             Octopus.Action.Docker.PortMapping = "{}"
             Octopus.Action.Docker.RestartPolicy = "always"
