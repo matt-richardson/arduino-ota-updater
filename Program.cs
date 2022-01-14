@@ -1,5 +1,6 @@
+using arduino_ota_updater;
+using idunno.Authentication.Basic;
 using Serilog;
-using Serilog.Events;
 
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
@@ -17,6 +18,18 @@ try
         .WriteTo.Console()
         .ReadFrom.Configuration(ctx.Configuration));
 
+    builder.Services.AddSingleton<IUserValidationService, UserValidationService>();
+    builder.Services.AddAuthentication(BasicAuthenticationDefaults.AuthenticationScheme)
+        .AddBasic(options =>
+        {
+            options.Realm = "arduino-ota-updater";
+            options.Events = new BasicAuthenticationEvents
+            {
+                OnValidateCredentials = BasicAuth.ValidateCredentials
+            };
+        });
+    builder.Services.AddAuthorization();
+
     var app = builder.Build();
     app.UseSerilogRequestLogging();
 
@@ -26,9 +39,11 @@ try
     }
     app.UseSerilogRequestLogging();
     app.UseHttpsRedirection();
-    
+    app.UseAuthentication();
+    app.UseAuthorization();
+
     var handler = new UpdateHandler();
-    app.MapGet("/update", handler.Handle);
+    app.MapGet("/update", handler.Handle).RequireAuthorization();
     app.Run();
     return 0;
 }
