@@ -26,7 +26,7 @@ step "Start new container" {
             Octopus.Action.Docker.PortAutoMap = "False"
             Octopus.Action.Docker.PortMapping = "{}"
             Octopus.Action.Docker.RestartPolicy = "always"
-            Octopus.Action.Docker.VolumeBindings = "{\"/app/packages\":{\"host\":\"/volume1/docker/ardunio-updater/packages\",\"readOnly\":\"True\",\"noCopy\":\"False\"}}"
+            Octopus.Action.Docker.VolumeBindings = "{\"/app/packages\":{\"host\":\"/volume1/docker/arduino-updater/packages\",\"readOnly\":\"True\",\"noCopy\":\"False\"}}"
             Octopus.Action.Package.DownloadOnTentacle = "False"
             Octopus.Action.Package.FeedId = "Docker Hub"
             Octopus.Action.Package.PackageId = "mattrichardson/arduino-ota-updater"
