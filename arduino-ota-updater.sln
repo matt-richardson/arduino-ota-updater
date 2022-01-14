@@ -1,0 +1,23 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "arduino-ota-updater", "arduino-ota-updater.csproj", "{72D15FB2-71C3-45D9-AEA9-AC48471B3F2A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_", "_", "{9880A982-6733-46D1-8F99-BE18A7717BAA}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+		appsettings.Development.json = appsettings.Development.json
+		.github\workflows\docker-image.yml = .github\workflows\docker-image.yml
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{72D15FB2-71C3-45D9-AEA9-AC48471B3F2A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{72D15FB2-71C3-45D9-AEA9-AC48471B3F2A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{72D15FB2-71C3-45D9-AEA9-AC48471B3F2A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{72D15FB2-71C3-45D9-AEA9-AC48471B3F2A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
