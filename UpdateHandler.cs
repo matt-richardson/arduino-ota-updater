@@ -40,6 +40,7 @@ class UpdateHandler
         using (LogContext.PushProperty("Files", files))
             logger.LogDebug("Found {Count} packages", files.Length);
         var result = files
+            .Where(x => !x.Contains('-'))  //dont ship out a pre-release (if it ever makes it this far)
             .Select(Map)
             .OrderByDescending(x => x.version)
             .First();
