@@ -25,7 +25,14 @@ class UpdateHandler
         if(!SdkHeaderExists(req, logger,  "x-ESP8266-sdk-version"))
             return Results.StatusCode(403);
         
-        var (latestVersion, localBinary) = GetLatestPackage(logger);
+        var candidates = GetCandidatePackages(logger);
+        if (!candidates.Any())
+        {
+            logger.LogWarning("No packages found - nothing to do";
+            return Results.StatusCode(304);
+        }
+        
+        var (latestVersion, localBinary) = GetLatestPackage(logger, candidates);
 
         if (!NeedsUpdate(req, logger, latestVersion, localBinary)) 
             return Results.StatusCode(304);
@@ -34,29 +41,41 @@ class UpdateHandler
         return Results.File(Path.GetFullPath(localBinary), "application/octet-stream", Path.GetFileName(localBinary));
     }
 
-    private (string version, string path) GetLatestPackage(ILogger<UpdateHandler> logger)
+    private (string version, string path) GetLatestPackage(ILogger<UpdateHandler> logger, IEnumerable<string> candidates)
+    {
+        var result = candidates
+            .Select(Map)
+            .OrderByDescending(x => x.version)
+            .FirstOrDefault();
+
+        logger.LogDebug("Latest package is {Version} found at {Path}", result.version.ToString(), result.path);
+        return (result.version.ToString(), result.path);
+    }
+
+    private static string[] GetCandidatePackages(ILogger<UpdateHandler> logger)
     {
         var files = Directory.GetFiles("packages", "*.bin");
         using (LogContext.PushProperty("Files", files))
             logger.LogDebug("Found {Count} packages", files.Length);
-        var result = files
-            .Where(x => !x.Contains('-'))  //dont ship out a pre-release (if it ever makes it this far)
-            .Select(Map)
-            .OrderByDescending(x => x.version)
-            .First();
-
-        logger.LogDebug("Latest package is {Version} found at {Path}", result.version.ToString(), result.path);
-        
-        return (result.version.ToString(), result.path);
+        var candidates = files
+            .Where(x => !GetVersionComponentOfFileName(x).Contains('-')) //dont ship out a pre-release (if it ever makes it this far)
+            .ToArray();
+        return candidates;
     }
 
     private static (Version version, string path) Map(string path)
+    {
+        var version = GetVersionComponentOfFileName(path);
+        return (new Version(version), path);
+    }
+
+    private static string GetVersionComponentOfFileName(string path)
     {
         var version = path
             .Replace("packages/", "")
             .Replace("water-tank-sensor.", "")
             .Replace(".bin", "");
-        return (new Version(version), path);
+        return version;
     }
 
     private bool NeedsUpdate(HttpRequest req, ILogger<UpdateHandler> logger, string latestVersion, string localBinary)
