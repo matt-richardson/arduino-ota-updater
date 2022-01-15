@@ -99,11 +99,14 @@ class UpdateHandler
             return false;
         }
 
-        if (value != null && req.Headers[name].ToString() != value)
+        var actualValue = req.Headers[name].ToString();
+        if (value != null && actualValue != value)
         {
-            logger.LogWarning("Unexpected header {Name}. Expected {Expected} but found {Actual}", name, value, req.Headers[name].ToString());
+            logger.LogWarning("Unexpected header {Name}. Expected {ExpectedValue} but found {ActualValue}", name, value, actualValue);
             return false;
         }
+        logger.LogInformation("Found expected header {Name} with value {ActualValue}", name, actualValue);
+
         return true;
     }
 
