@@ -28,7 +28,7 @@ class UpdateHandler
         var candidates = GetCandidatePackages(logger);
         if (!candidates.Any())
         {
-            logger.LogWarning("No packages found - nothing to do";
+            logger.LogWarning("No packages found - nothing to do");
             return Results.StatusCode(304);
         }
         
