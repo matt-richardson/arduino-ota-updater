@@ -24,6 +24,8 @@ class UpdateHandler
             return Results.StatusCode(403);        
         if(!SdkHeaderExists(req, logger,  "x-ESP8266-sdk-version"))
             return Results.StatusCode(403);
+        if(!SdkHeaderExists(req, logger,  "x-ESP8266-version"))
+            return Results.StatusCode(403);
         
         var candidates = GetCandidatePackages(logger);
         if (!candidates.Any())
@@ -80,34 +82,38 @@ class UpdateHandler
 
     private bool NeedsUpdate(HttpRequest req, ILogger<UpdateHandler> logger, string latestVersion, string localBinary)
     {
-        if (SdkHeaderExists(req, logger,  "x-ESP8266-sdk-version") || !VersionDoesNotMatch(req, logger, latestVersion))
-            return HashDoesNotMatch(req, logger, localBinary);
-        return true;
-    }
-
-    private bool VersionDoesNotMatch(HttpRequest req, ILogger<UpdateHandler> logger, string latestVersion)
-    {
-        var deviceVersion = req.Headers["x-ESP8266-version"].ToString();
-        if (latestVersion != deviceVersion)
-        {
-            logger.LogDebug("Checking device version {DeviceVersion} against latest version {LatestVersion} - no match", deviceVersion, latestVersion);
+        if (!VersionMatches(req, logger, latestVersion))
             return true;
-        }
-        logger.LogDebug("Checking device version {DeviceVersion} against latest version {LatestVersion} - they are the same", deviceVersion, latestVersion);
+        if (!HashMatches(req, logger, localBinary))
+            return true;
         return false;
     }
 
-    private bool HashDoesNotMatch(HttpRequest req, ILogger<UpdateHandler> logger, string localBinary)
+    private bool VersionMatches(HttpRequest req, ILogger<UpdateHandler> logger, string latestVersion)
+    {
+        var deviceVersion = req.Headers["x-ESP8266-version"].ToString();
+        if (latestVersion == deviceVersion)
+        {
+            logger.LogDebug("Checking device version {DeviceVersion} against latest version {LatestVersion} - they are the same", deviceVersion, latestVersion);
+            return true;
+        }
+
+        logger.LogDebug("Checking device version {DeviceVersion} against latest version {LatestVersion} - no match", deviceVersion, latestVersion);
+        return false;
+    }
+
+    private bool HashMatches(HttpRequest req, ILogger<UpdateHandler> logger, string localBinary)
     {
         var deviceHash = req.Headers["x-ESP8266-sketch-md5"].ToString();
         var localBinaryHash = GetMD5(localBinary).ToHex();
 
-        if (deviceHash != localBinaryHash)
+        if (deviceHash == localBinaryHash)
         {
-            logger.LogDebug("Checking device hash {DeviceHash} against latest version hash {LatestVersionHash} - no match", deviceHash, localBinaryHash);
+            logger.LogDebug("Checking device hash {DeviceHash} against latest version hash {LatestVersionHash} - they are the same", deviceHash, localBinaryHash);
             return true;
         }
-        logger.LogDebug("Checking device hash {DeviceHash} against latest version hash {LatestVersionHash} - they are the same", deviceHash, localBinaryHash);
+
+        logger.LogDebug("Checking device hash {DeviceHash} against latest version hash {LatestVersionHash} - no match", deviceHash, localBinaryHash);
         return false;
     }
 
