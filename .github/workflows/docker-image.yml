@@ -32,6 +32,8 @@ jobs:
   create-octopus-release:
     name: "Create Octopus release"
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write # Required to obtain the ID token from GitHub Actions
     needs: [build-docker-image]
     steps:
       - name: Login to Octopus Deploy 🐙
