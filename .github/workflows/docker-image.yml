@@ -44,6 +44,7 @@ jobs:
       - name: Create Octopus Release 🐙
         uses: OctopusDeploy/create-release-action@v3
         with:
+          space: Default
           project: arduino-ota-updater
           release_number: ${{env.BUILD_NUMBER}}
           package_version: ${{env.BUILD_NUMBER}}
