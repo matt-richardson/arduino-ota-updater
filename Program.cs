@@ -44,6 +44,7 @@ try
 
     var handler = new UpdateHandler();
     app.MapGet("/update", handler.Handle).RequireAuthorization();
+    app.MapGet("/health", () => "OK").AllowAnonymous();
     app.Run();
     return 0;
 }
