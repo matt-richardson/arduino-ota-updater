@@ -1,3 +1,20 @@
+step "disable-uptime-kuma-check" {
+    name = "Disable uptime-kuma check"
+    properties = {
+        Octopus.Action.TargetRoles = "nas"
+    }
+
+    action {
+        properties = {
+            Octopus.Action.RunOnServer = "false"
+            Octopus.Action.Template.Id = "ActionTemplates-1"
+            Octopus.Action.Template.Version = "1"
+            UptimeKuma.Monitor.Id = "14"
+        }
+        worker_pool_variable = ""
+    }
+}
+
 step "stop-existing-container" {
     name = "Stop existing container"
     properties = {
@@ -45,5 +62,21 @@ step "start-new-container" {
                 SelectionMode = "immediate"
             }
         }
+    }
+}
+
+step "re-enable-uptime-kuma-check" {
+    name = "Re-enable uptime-kuma check"
+    properties = {
+        Octopus.Action.TargetRoles = "nas"
+    }
+
+    action {
+        properties = {
+            Octopus.Action.RunOnServer = "false"
+            Octopus.Action.Template.Id = "ActionTemplates-2"
+            Octopus.Action.Template.Version = "0"
+        }
+        worker_pool_variable = ""
     }
 }
