@@ -8,7 +8,7 @@ step "disable-uptime-kuma-check" {
         properties = {
             Octopus.Action.RunOnServer = "false"
             Octopus.Action.Template.Id = "ActionTemplates-1"
-            Octopus.Action.Template.Version = "2"
+            Octopus.Action.Template.Version = "3"
             UptimeKuma.Monitor.Id = "14,3"
         }
         worker_pool_variable = ""
