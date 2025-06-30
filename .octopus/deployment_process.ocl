@@ -75,7 +75,7 @@ step "re-enable-uptime-kuma-check" {
         properties = {
             Octopus.Action.RunOnServer = "false"
             Octopus.Action.Template.Id = "ActionTemplates-2"
-            Octopus.Action.Template.Version = "0"
+            Octopus.Action.Template.Version = "1"
         }
         worker_pool_variable = ""
     }
