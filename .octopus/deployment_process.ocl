@@ -42,9 +42,9 @@ step "start-new-container" {
         action_type = "Octopus.DockerRun"
         properties = {
             Octopus.Action.Docker.Args = "--name arduino-ota-updater --memory 128m"
-            Octopus.Action.Docker.EnvVariable = "{\"VIRTUAL_HOST\":\"#{url}\",\"LETSENCRYPT_HOST\":\"#{url}\",\"Serilog__WriteTo__0__Args__serverUrl\":\"#{Seq.ServerUrl}\",\"Serilog__WriteTo__0__Args__ApiKey\":\"#{Seq.Arduino.Updater.ApiKey}\",\"LOGSPOUT\":\"ignore\",\"NETWORK_ACCESS\":\"internal\",\"Authentication__UserName\":\"#{Authentication.UserName}\",\"Authentication__Password\":\"#{Authentication.Password}\"}"
+            Octopus.Action.Docker.EnvVariable = "{\"VIRTUAL_HOST\":\"#{url}\",\"LETSENCRYPT_HOST\":\"#{url}\",\"Serilog__WriteTo__0__Args__serverUrl\":\"#{Seq.ServerUrl}\",\"Serilog__WriteTo__0__Args__ApiKey\":\"#{Seq.Arduino.Updater.ApiKey}\",\"LOGSPOUT\":\"ignore\",\"NETWORK_ACCESS\":\"internal\",\"Authentication__UserName\":\"#{Authentication.UserName}\",\"Authentication__Password\":\"#{Authentication.Password}\",\"VIRTUAL_PORT\":\"8987\"}"
             Octopus.Action.Docker.PortAutoMap = "False"
-            Octopus.Action.Docker.PortMapping = "{}"
+            Octopus.Action.Docker.PortMapping = "{\"80\":\"8987\"}"
             Octopus.Action.Docker.RestartPolicy = "always"
             Octopus.Action.Docker.VolumeBindings = "{\"/app/packages\":{\"host\":\"/volume1/docker/arduino-updater/packages\",\"readOnly\":\"True\",\"noCopy\":\"False\"}}"
             Octopus.Action.Package.DownloadOnTentacle = "False"
