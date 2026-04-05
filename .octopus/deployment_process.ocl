@@ -43,6 +43,8 @@ step "start-new-container" {
         properties = {
             Octopus.Action.Docker.Args = "--name arduino-ota-updater --memory 128m"
             Octopus.Action.Docker.EnvVariable = "{\"VIRTUAL_HOST\":\"#{url}\",\"LETSENCRYPT_HOST\":\"#{url}\",\"Serilog__WriteTo__0__Args__serverUrl\":\"#{Seq.ServerUrl}\",\"Serilog__WriteTo__0__Args__ApiKey\":\"#{Seq.Arduino.Updater.ApiKey}\",\"LOGSPOUT\":\"ignore\",\"NETWORK_ACCESS\":\"internal\",\"Authentication__UserName\":\"#{Authentication.UserName}\",\"Authentication__Password\":\"#{Authentication.Password}\",\"VIRTUAL_PORT\":\"8987\",\"ASPNETCORE_URLS\":\"http://+:8987\"}"
+            Octopus.Action.Docker.NetworkName = "homelab"
+            Octopus.Action.Docker.NetworkType = "network"
             Octopus.Action.Docker.PortAutoMap = "False"
             Octopus.Action.Docker.PortMapping = "{\"8987\":\"8987\"}"
             Octopus.Action.Docker.RestartPolicy = "unless-stopped"
