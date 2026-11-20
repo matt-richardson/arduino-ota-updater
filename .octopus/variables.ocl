@@ -1,3 +1,7 @@
 variable "Url" {
     value "#{Octopus.Project.Name}.sybix9.com" {}
 }
+
+variable "Octopus.Task.ConcurrencyTag" {
+    value "recordanti" {}
+}
