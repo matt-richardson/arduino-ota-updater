@@ -1,0 +1,3 @@
+variable "Url" {
+    value "#{Octopus.Project.Name}.sybix9.com" {}
+}
